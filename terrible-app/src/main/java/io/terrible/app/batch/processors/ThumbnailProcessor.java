@@ -1,13 +1,13 @@
+/* Licensed under Apache-2.0 */
 package io.terrible.app.batch.processors;
 
 import io.terrible.app.domain.MediaFile;
 import io.terrible.app.utils.FileUtil;
 import io.terrible.library.thumbnails.services.ThumbnailService;
+import java.nio.file.Path;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.item.ItemProcessor;
-
-import java.nio.file.Path;
 
 @Slf4j
 @RequiredArgsConstructor

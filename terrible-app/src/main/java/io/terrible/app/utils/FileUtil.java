@@ -2,12 +2,11 @@
 package io.terrible.app.utils;
 
 import io.terrible.app.domain.MediaFile;
+import java.io.File;
+import java.nio.file.Files;
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
-
-import java.io.File;
-import java.nio.file.Files;
 
 @Slf4j
 @UtilityClass

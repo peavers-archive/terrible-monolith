@@ -6,6 +6,7 @@ import io.terrible.app.batch.writers.MongoReactiveWriter;
 import io.terrible.app.domain.MediaFile;
 import io.terrible.directory.scanner.domain.MediaFileDto;
 import io.terrible.directory.scanner.service.ScanService;
+import java.io.IOException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.Job;
@@ -22,8 +23,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.mongodb.core.ReactiveMongoTemplate;
-
-import java.io.IOException;
 
 @Slf4j
 @Configuration

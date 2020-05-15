@@ -44,7 +44,7 @@ public class DirectoryScannerScheduler {
 
     try {
       simpleJobLauncher.run(
-              directoryScannerJob,
+          directoryScannerJob,
           new JobParametersBuilder()
               .addDate("date", new Date())
               .addString("directory", directory.getPath())

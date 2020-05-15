@@ -1,3 +1,4 @@
+/* Licensed under Apache-2.0 */
 package io.terrible.app.batch.processors;
 
 import io.terrible.app.domain.MediaFile;
@@ -9,13 +10,13 @@ import org.springframework.beans.BeanUtils;
 @RequiredArgsConstructor
 public class FileProcessor implements ItemProcessor<MediaFileDto, MediaFile> {
 
-    @Override
-    public MediaFile process(final MediaFileDto mediaFileDto) {
+  @Override
+  public MediaFile process(final MediaFileDto mediaFileDto) {
 
-        final MediaFile mediaFile = MediaFile.builder().build();
+    final MediaFile mediaFile = MediaFile.builder().build();
 
-        BeanUtils.copyProperties(mediaFileDto, mediaFile);
+    BeanUtils.copyProperties(mediaFileDto, mediaFile);
 
-        return mediaFile;
-    }
+    return mediaFile;
+  }
 }
