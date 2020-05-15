@@ -10,19 +10,13 @@ public interface MediaFileService {
 
   Flux<MediaFile> findAll();
 
-  Flux<MediaFile> findAllByOrderBySizeDesc(int limit);
-
-  Flux<MediaFile> findAllByThumbnailsIsNull();
+  Flux<MediaFile> findAllWithoutThumbnails();
 
   Flux<GroupedMediaFile> findAllGroupedByDate(String dateField);
 
   Mono<MediaFile> findById(String id);
 
-  Mono<MediaFile> findByPath(String absolutePath);
-
   Mono<MediaFile> save(MediaFile mediaFile);
-
-  Flux<MediaFile> saveAll(Flux<MediaFile> mediaFiles);
 
   Mono<Void> deleteAll();
 }

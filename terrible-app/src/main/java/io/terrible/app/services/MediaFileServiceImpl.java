@@ -1,6 +1,24 @@
 /* Licensed under Apache-2.0 */
 package io.terrible.app.services;
 
+import io.terrible.app.domain.GroupedMediaFile;
+import io.terrible.app.domain.MediaFile;
+import io.terrible.app.repository.MediaFileRepository;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.bson.Document;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.mongodb.core.ReactiveMongoTemplate;
+import org.springframework.data.mongodb.core.aggregation.Aggregation;
+import org.springframework.data.mongodb.core.aggregation.GroupOperation;
+import org.springframework.data.mongodb.core.aggregation.ProjectionOperation;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.stereotype.Service;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
+
+import java.time.LocalDate;
+
 import static java.time.temporal.TemporalAdjusters.firstDayOfYear;
 import static java.time.temporal.TemporalAdjusters.lastDayOfYear;
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.group;
@@ -10,24 +28,6 @@ import static org.springframework.data.mongodb.core.aggregation.Aggregation.proj
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.sort;
 import static org.springframework.data.mongodb.core.query.Criteria.where;
 
-import io.terrible.app.domain.GroupedMediaFile;
-import io.terrible.app.domain.MediaFile;
-import io.terrible.app.repository.MediaFileRepository;
-import java.time.LocalDate;
-import java.util.List;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.bson.Document;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.aggregation.Aggregation;
-import org.springframework.data.mongodb.core.aggregation.GroupOperation;
-import org.springframework.data.mongodb.core.aggregation.ProjectionOperation;
-import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.stereotype.Service;
-import reactor.core.publisher.Flux;
-import reactor.core.publisher.Mono;
-
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -35,7 +35,7 @@ public class MediaFileServiceImpl implements MediaFileService {
 
   private final MediaFileRepository repository;
 
-  private final MongoTemplate mongoTemplate;
+  private final ReactiveMongoTemplate mongoTemplate;
 
   @Override
   public Flux<MediaFile> findAll() {
@@ -46,19 +46,11 @@ public class MediaFileServiceImpl implements MediaFileService {
   }
 
   @Override
-  public Flux<MediaFile> findAllByOrderBySizeDesc(final int limit) {
+  public Flux<MediaFile> findAllWithoutThumbnails() {
 
-    log.info("Find by size top {}", limit);
+    log.info("Find all without thumbnails");
 
-    return repository.findAllByOrderByCreatedTimeDesc().take(limit);
-  }
-
-  @Override
-  public Flux<MediaFile> findAllByThumbnailsIsNull() {
-
-    log.info("Find all by thumbnail is null");
-
-    return repository.findAll();
+    return repository.findAllWithoutThumbnails();
   }
 
   @Override
@@ -70,27 +62,11 @@ public class MediaFileServiceImpl implements MediaFileService {
   }
 
   @Override
-  public Mono<MediaFile> findByPath(final String path) {
-
-    log.info("Find by absolute path {}", path);
-
-    return repository.findByPath(path);
-  }
-
-  @Override
   public Mono<MediaFile> save(final MediaFile mediaFile) {
 
     log.info("Save {}", mediaFile);
 
     return repository.save(mediaFile);
-  }
-
-  @Override
-  public Flux<MediaFile> saveAll(final Flux<MediaFile> mediaFiles) {
-
-    log.info("Save all {}", mediaFiles);
-
-    return repository.saveAll(mediaFiles);
   }
 
   @Override
@@ -141,11 +117,6 @@ public class MediaFileServiceImpl implements MediaFileService {
             groupBy,
             sort(Sort.Direction.DESC, "year", "month", "day"));
 
-    final List<GroupedMediaFile> documents =
-        mongoTemplate
-            .aggregate(aggregation, "media-files", GroupedMediaFile.class)
-            .getMappedResults();
-
-    return Flux.fromStream(documents.stream());
+    return mongoTemplate.aggregate(aggregation, "media-files", GroupedMediaFile.class);
   }
 }

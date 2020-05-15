@@ -17,7 +17,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-webflux'
     implementation 'org.springframework.boot:spring-boot-starter-data-mongodb-reactive'
 
-    // Spring batch
+    // Spring Batch
     implementation 'org.springframework.boot:spring-boot-starter-batch'
     runtimeOnly 'org.hsqldb:hsqldb'
 

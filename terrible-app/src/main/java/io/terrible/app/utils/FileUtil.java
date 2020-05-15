@@ -2,11 +2,14 @@
 package io.terrible.app.utils;
 
 import io.terrible.app.domain.MediaFile;
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
 import lombok.experimental.UtilityClass;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.io.FileUtils;
 
+import java.io.File;
+import java.nio.file.Files;
+
+@Slf4j
 @UtilityClass
 public class FileUtil {
 
@@ -31,10 +34,6 @@ public class FileUtil {
    * Create a new directory if possible on the host filesystem. The input path will be rejected if
    * permissions fail or the IO is unable to create. If the file directory already exists, the path
    * is returned and no IO operations are preformed.
-   *
-   * @param file
-   * @return the path of the new directory
-   * @throws IOException if unable to create the directory for any reason
    */
   private String createDirectory(File file) {
 
@@ -42,7 +41,13 @@ public class FileUtil {
       return file.getAbsolutePath();
     }
 
-    if (!file.mkdirs()) {}
+    FileUtils.deleteQuietly(file);
+
+    if (file.mkdirs()) {
+      return file.getAbsolutePath();
+    } else {
+      log.warn("Unable to create thumbnail directory");
+    }
 
     return file.getAbsolutePath();
   }

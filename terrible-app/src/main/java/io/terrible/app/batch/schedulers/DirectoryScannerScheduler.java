@@ -1,5 +1,5 @@
 /* Licensed under Apache-2.0 */
-package io.terrible.app.schedulers;
+package io.terrible.app.batch.schedulers;
 
 import io.terrible.app.configuration.TerribleConfig;
 import io.terrible.app.domain.Directory;
@@ -30,7 +30,7 @@ public class DirectoryScannerScheduler {
 
   private final DirectoryService directoryService;
 
-  private final Job job;
+  private final Job directoryScannerJob;
 
   @Scheduled(fixedDelayString = "${batch.delay}")
   public void schedule() {
@@ -44,7 +44,7 @@ public class DirectoryScannerScheduler {
 
     try {
       simpleJobLauncher.run(
-          job,
+              directoryScannerJob,
           new JobParametersBuilder()
               .addDate("date", new Date())
               .addString("directory", directory.getPath())
@@ -53,7 +53,7 @@ public class DirectoryScannerScheduler {
         | JobRestartException
         | JobInstanceAlreadyCompleteException
         | JobParametersInvalidException e) {
-      log.error("Unable to run {} {} {}", job.getName(), e.getMessage(), e);
+      log.error("Unable to run {} {} {}", directoryScannerJob.getName(), e.getMessage(), e);
     }
   }
 }

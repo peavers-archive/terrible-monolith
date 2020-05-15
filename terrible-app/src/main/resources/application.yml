@@ -10,7 +10,7 @@ server:
 
 terrible:
   index: media
-  thumbnailJob: false
+  thumbnailJob: true
   directoryJob: true
   search-service:
     scheme: http

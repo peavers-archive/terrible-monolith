@@ -1,5 +1,5 @@
 /* Licensed under Apache-2.0 */
-package io.terrible.app.configuration;
+package io.terrible.app.batch.configuration;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.batch.core.launch.support.SimpleJobLauncher;

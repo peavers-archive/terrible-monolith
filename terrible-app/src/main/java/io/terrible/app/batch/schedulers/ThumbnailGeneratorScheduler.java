@@ -1,5 +1,5 @@
 /* Licensed under Apache-2.0 */
-package io.terrible.app.schedulers;
+package io.terrible.app.batch.schedulers;
 
 import io.terrible.app.configuration.TerribleConfig;
 import java.util.Date;
@@ -21,7 +21,7 @@ import org.springframework.stereotype.Component;
 @Component
 @EnableScheduling
 @RequiredArgsConstructor
-public class ThumbnailGeneratorBatch {
+public class ThumbnailGeneratorScheduler {
 
   private final TerribleConfig config;
 
@@ -36,8 +36,6 @@ public class ThumbnailGeneratorBatch {
           JobRestartException, JobInstanceAlreadyCompleteException {
 
     if (config.isThumbnailJob()) {
-      log.info("Running job {}", thumbnailGeneratorJob.getName());
-
       simpleJobLauncher.run(
           thumbnailGeneratorJob,
           new JobParametersBuilder().addDate("date", new Date()).toJobParameters());
