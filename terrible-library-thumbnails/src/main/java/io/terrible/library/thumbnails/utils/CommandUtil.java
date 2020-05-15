@@ -55,8 +55,6 @@ public class CommandUtil {
     private ArrayList<String> silentOperation() {
 
         final ArrayList<String> commands = new ArrayList<>();
-
-        commands.add("-nostats");
         commands.add("-hide_banner");
         commands.add("-loglevel");
         commands.add("panic");
