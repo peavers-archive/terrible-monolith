@@ -3,6 +3,7 @@ package io.terrible.app.controller;
 
 import io.terrible.app.domain.MediaFile;
 import io.terrible.app.services.MediaFileService;
+import java.io.File;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.FileSystemResource;
@@ -14,8 +15,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Mono;
-
-import java.io.File;
 
 @Slf4j
 @CrossOrigin

@@ -4,15 +4,14 @@ package io.terrible.app.services;
 import io.terrible.app.domain.History;
 import io.terrible.app.domain.MediaFile;
 import io.terrible.app.repository.HistoryRepository;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Service;
-import reactor.core.publisher.Mono;
-
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Comparator;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
+import reactor.core.publisher.Mono;
 
 /**
  * History objects contain a list of MediaFile objects. Each time a new object is added to History

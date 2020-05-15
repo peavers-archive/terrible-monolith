@@ -1,3 +1,4 @@
+/* Licensed under Apache-2.0 */
 package io.terrible.app.configuration;
 
 import lombok.RequiredArgsConstructor;
@@ -10,14 +11,14 @@ import org.springframework.context.annotation.Configuration;
 @RequiredArgsConstructor
 public class SimpleJobConfig {
 
-    private final JobRepository jobRepository;
+  private final JobRepository jobRepository;
 
-    @Bean
-    public SimpleJobLauncher simpleJobLauncher() {
+  @Bean
+  public SimpleJobLauncher simpleJobLauncher() {
 
-        SimpleJobLauncher simpleJobLauncher = new SimpleJobLauncher();
-        simpleJobLauncher.setJobRepository(jobRepository);
+    SimpleJobLauncher simpleJobLauncher = new SimpleJobLauncher();
+    simpleJobLauncher.setJobRepository(jobRepository);
 
-        return simpleJobLauncher;
-    }
+    return simpleJobLauncher;
+  }
 }

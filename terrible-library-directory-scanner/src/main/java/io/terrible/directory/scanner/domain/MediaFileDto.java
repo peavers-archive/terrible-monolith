@@ -1,14 +1,12 @@
 /* Licensed under Apache-2.0 */
 package io.terrible.directory.scanner.domain;
 
-
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.time.LocalDateTime;
-import java.util.ArrayList;
 
 @Data
 @Builder
@@ -28,7 +26,7 @@ public class MediaFileDto {
 
   private long size;
 
-  private ArrayList<String> thumbnails = new ArrayList<>();
+  @Builder.Default private ArrayList<String> thumbnails = new ArrayList<>();
 
   private LocalDateTime createdTime;
 

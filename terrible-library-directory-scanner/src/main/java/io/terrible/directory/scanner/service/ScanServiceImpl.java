@@ -2,14 +2,13 @@
 package io.terrible.directory.scanner.service;
 
 import com.google.common.net.MediaType;
+import io.terrible.directory.scanner.converters.MediaFileConverter;
+import io.terrible.directory.scanner.domain.MediaFileDto;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.ArrayDeque;
 import java.util.Collection;
-
-import io.terrible.directory.scanner.converters.MediaFileConverter;
-import io.terrible.directory.scanner.domain.MediaFileDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
@@ -26,7 +25,7 @@ public class ScanServiceImpl implements ScanService {
   public ArrayDeque<MediaFileDto> scanMedia(final String input) throws IOException {
 
     final Collection<File> files =
-            FileUtils.listFiles(new File(input), TrueFileFilter.INSTANCE, TrueFileFilter.INSTANCE);
+        FileUtils.listFiles(new File(input), TrueFileFilter.INSTANCE, TrueFileFilter.INSTANCE);
 
     final ArrayDeque<MediaFileDto> results = new ArrayDeque<>(files.size());
 
@@ -34,8 +33,9 @@ public class ScanServiceImpl implements ScanService {
       final String mimeType = Files.probeContentType(file.toPath());
 
       //noinspection UnstableApiUsage
-      if (StringUtils.isNoneEmpty(mimeType) && !file.getAbsolutePath().contains("sample") &&
-          MediaType.parse(mimeType).is(MediaType.ANY_VIDEO_TYPE)) {
+      if (StringUtils.isNoneEmpty(mimeType)
+          && !file.getAbsolutePath().contains("sample")
+          && MediaType.parse(mimeType).is(MediaType.ANY_VIDEO_TYPE)) {
 
         results.add(MediaFileConverter.convert(file));
       }

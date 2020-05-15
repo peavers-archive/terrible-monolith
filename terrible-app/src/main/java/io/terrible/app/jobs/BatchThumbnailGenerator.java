@@ -1,8 +1,12 @@
+/* Licensed under Apache-2.0 */
 package io.terrible.app.jobs;
 
 import io.terrible.app.domain.MediaFile;
 import io.terrible.app.utils.FileUtil;
 import io.terrible.library.thumbnails.services.ThumbnailService;
+import java.nio.file.Path;
+import java.util.HashMap;
+import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.Job;
@@ -24,10 +28,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
-import java.nio.file.Path;
-import java.util.HashMap;
-import java.util.Map;
-
 @Slf4j
 @Configuration
 @EnableScheduling
@@ -35,107 +35,114 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class BatchThumbnailGenerator {
 
+  private final ThumbnailService thumbnailService;
+
+  private final JobBuilderFactory jobBuilderFactory;
+
+  private final StepBuilderFactory stepBuilderFactory;
+
+  private final MongoTemplate mongoTemplate;
+
+  private final TaskExecutor taskExecutor;
+
+  @StepScope
+  @Bean(name = "thumbnailGeneratorReader")
+  public MongoItemReader<MediaFile> reader() {
+
+    final MongoItemReader<MediaFile> reader = new MongoItemReader<>();
+
+    final Map<String, Sort.Direction> map = new HashMap<>();
+    map.put("_id", Sort.Direction.DESC);
+
+    reader.setTemplate(mongoTemplate);
+    reader.setSort(map);
+    reader.setTargetType(MediaFile.class);
+    reader.setQuery(
+        "{ 'thumbnails.11': { $exists: false} }"); // Find all documents who don't have 12
+    // thumbnails
+    reader.setSaveState(false);
+
+    return reader;
+  }
+
+  @Bean(name = "thumbnailGeneratorProcessor")
+  public Processor processor() {
+
+    return new Processor(thumbnailService);
+  }
+
+  @Bean(name = "thumbnailGeneratorWriter")
+  public ItemWriter<MediaFile> writer() {
+
+    final MongoItemWriter<MediaFile> writer = new MongoItemWriter<>();
+
+    try {
+      writer.setTemplate(mongoTemplate);
+    } catch (final Exception e) {
+      log.error(e.toString());
+    }
+
+    writer.setCollection("media-files");
+
+    return writer;
+  }
+
+  @Bean(name = "thumbnailGeneratorJob")
+  public Job thumbnailGeneratorJob() {
+
+    return jobBuilderFactory
+        .get("thumbnailGeneratorJob")
+        .incrementer(new RunIdIncrementer())
+        .flow(partitionedStep(step()))
+        .end()
+        .build();
+  }
+
+  @Bean(name = "thumbnailGeneratorStep")
+  public Step step() {
+
+    return stepBuilderFactory
+        .get("thumbnailGeneratorStep")
+        .<MediaFile, MediaFile>chunk(10)
+        .reader(reader())
+        .processor(processor())
+        .writer(writer())
+        .build();
+  }
+
+  @Bean
+  public Step partitionedStep(Step thumbnailGeneratorStep) {
+
+    return stepBuilderFactory
+        .get("partitionedStep")
+        .partitioner(thumbnailGeneratorStep)
+        .partitioner("thumbnailGeneratorStep", new SimplePartitioner())
+        .taskExecutor(taskExecutor)
+        .gridSize(6)
+        .build();
+  }
+
+  @RequiredArgsConstructor
+  static class Processor implements ItemProcessor<MediaFile, MediaFile> {
+
+    private static final int NUMBER_OF_THUMBNAILS = 12;
+
     private final ThumbnailService thumbnailService;
 
-    private final JobBuilderFactory jobBuilderFactory;
+    @Override
+    public MediaFile process(final MediaFile mediaFile) {
 
-    private final StepBuilderFactory stepBuilderFactory;
+      mediaFile.setThumbnailPath(FileUtil.getThumbnailDirectory(mediaFile));
 
-    private final MongoTemplate mongoTemplate;
+      final Path input = Path.of(mediaFile.getPath());
+      final Path output = Path.of(mediaFile.getThumbnailPath());
 
-    private final TaskExecutor taskExecutor;
+      mediaFile.setThumbnails(
+          thumbnailService.createThumbnails(input, output, NUMBER_OF_THUMBNAILS));
 
-    @StepScope
-    @Bean(name = "thumbnailGeneratorReader")
-    public MongoItemReader<MediaFile> reader() {
+      log.info("Thumbnails ready for media file: {}", mediaFile.getId());
 
-        final MongoItemReader<MediaFile> reader = new MongoItemReader<>();
-
-        final Map<String, Sort.Direction> map = new HashMap<>();
-        map.put("_id", Sort.Direction.DESC);
-
-        reader.setTemplate(mongoTemplate);
-        reader.setSort(map);
-        reader.setTargetType(MediaFile.class);
-        reader.setQuery("{ 'thumbnails.11': { $exists: false} }"); // Find all documents who don't have 12 thumbnails
-        reader.setSaveState(false);
-
-        return reader;
+      return mediaFile;
     }
-
-    @Bean(name = "thumbnailGeneratorProcessor")
-    public Processor processor() {
-
-        return new Processor(thumbnailService);
-    }
-
-    @Bean(name = "thumbnailGeneratorWriter")
-    public ItemWriter<MediaFile> writer() {
-
-        final MongoItemWriter<MediaFile> writer = new MongoItemWriter<>();
-
-        try {
-            writer.setTemplate(mongoTemplate);
-        } catch (final Exception e) {
-            log.error(e.toString());
-        }
-
-        writer.setCollection("media-files");
-
-        return writer;
-    }
-
-    @Bean(name = "thumbnailGeneratorJob")
-    public Job thumbnailGeneratorJob() {
-
-        return jobBuilderFactory.get("thumbnailGeneratorJob")
-                .incrementer(new RunIdIncrementer())
-                .flow(partitionedStep(step()))
-                .end()
-                .build();
-    }
-
-    @Bean(name = "thumbnailGeneratorStep")
-    public Step step() {
-
-        return stepBuilderFactory.get("thumbnailGeneratorStep").<MediaFile, MediaFile>chunk(10)
-                .reader(reader())
-                .processor(processor())
-                .writer(writer())
-                .build();
-    }
-
-    @Bean
-    public Step partitionedStep(Step thumbnailGeneratorStep) {
-
-        return stepBuilderFactory.get("partitionedStep")
-                .partitioner(thumbnailGeneratorStep)
-                .partitioner("thumbnailGeneratorStep", new SimplePartitioner())
-                .taskExecutor(taskExecutor)
-                .gridSize(6)
-                .build();
-    }
-
-    @RequiredArgsConstructor
-    static class Processor implements ItemProcessor<MediaFile, MediaFile> {
-
-        private final static int NUMBER_OF_THUMBNAILS = 12;
-
-        private final ThumbnailService thumbnailService;
-
-        @Override
-        public MediaFile process(final MediaFile mediaFile) {
-
-            mediaFile.setThumbnailPath(FileUtil.getThumbnailDirectory(mediaFile));
-
-            final Path input = Path.of(mediaFile.getPath());
-            final Path output = Path.of(mediaFile.getThumbnailPath());
-
-            mediaFile.setThumbnails(thumbnailService.createThumbnails(input, output, NUMBER_OF_THUMBNAILS));
-
-            log.info("Thumbnails ready for media file: {}", mediaFile.getId());
-
-            return mediaFile;
-        }
-    }
+  }
 }

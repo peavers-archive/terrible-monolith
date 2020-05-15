@@ -1,8 +1,10 @@
+/* Licensed under Apache-2.0 */
 package io.terrible.app.schedulers;
 
 import io.terrible.app.configuration.TerribleConfig;
 import io.terrible.app.domain.Directory;
 import io.terrible.app.services.DirectoryService;
+import java.util.Date;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.Job;
@@ -16,39 +18,42 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import java.util.Date;
-
 @Slf4j
 @Component
 @EnableScheduling
 @RequiredArgsConstructor
 public class DirectoryScannerScheduler {
 
-    private final TerribleConfig config;
+  private final TerribleConfig config;
 
-    private final SimpleJobLauncher simpleJobLauncher;
+  private final SimpleJobLauncher simpleJobLauncher;
 
-    private final DirectoryService directoryService;
+  private final DirectoryService directoryService;
 
-    private final Job job;
+  private final Job job;
 
-    @Scheduled(fixedDelayString = "${batch.delay}")
-    public void schedule() {
+  @Scheduled(fixedDelayString = "${batch.delay}")
+  public void schedule() {
 
-        if (config.isDirectoryJob()) {
-            directoryService.findAll().doOnNext(this::execute).subscribe();
-        }
+    if (config.isDirectoryJob()) {
+      directoryService.findAll().doOnNext(this::execute).subscribe();
     }
+  }
 
-    private void execute(final Directory directory) {
+  private void execute(final Directory directory) {
 
-        try {
-            simpleJobLauncher.run(job, new JobParametersBuilder().addDate("date", new Date())
-                    .addString("directory", directory.getPath())
-                    .toJobParameters());
-        } catch (JobExecutionAlreadyRunningException | JobRestartException | JobInstanceAlreadyCompleteException | JobParametersInvalidException e) {
-            log.error("Unable to run {} {} {}", job.getName(), e.getMessage(), e);
-        }
+    try {
+      simpleJobLauncher.run(
+          job,
+          new JobParametersBuilder()
+              .addDate("date", new Date())
+              .addString("directory", directory.getPath())
+              .toJobParameters());
+    } catch (JobExecutionAlreadyRunningException
+        | JobRestartException
+        | JobInstanceAlreadyCompleteException
+        | JobParametersInvalidException e) {
+      log.error("Unable to run {} {} {}", job.getName(), e.getMessage(), e);
     }
-
+  }
 }

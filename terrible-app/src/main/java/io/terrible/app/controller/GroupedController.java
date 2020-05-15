@@ -1,3 +1,4 @@
+/* Licensed under Apache-2.0 */
 package io.terrible.app.controller;
 
 import io.terrible.app.domain.GroupedMediaFile;
@@ -12,12 +13,11 @@ import reactor.core.publisher.Flux;
 @RequiredArgsConstructor
 public class GroupedController {
 
-    private final MediaFileService mediaFileService;
+  private final MediaFileService mediaFileService;
 
-    @GetMapping("/media-files")
-    public Flux<GroupedMediaFile> group(@RequestParam final String group) {
+  @GetMapping("/media-files")
+  public Flux<GroupedMediaFile> group(@RequestParam final String group) {
 
-        return mediaFileService.findAllGroupedByDate(group);
-    }
-
+    return mediaFileService.findAllGroupedByDate(group);
+  }
 }
