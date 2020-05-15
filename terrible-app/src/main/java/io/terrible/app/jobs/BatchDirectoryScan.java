@@ -1,8 +1,10 @@
+/* Licensed under Apache-2.0 */
 package io.terrible.app.jobs;
 
 import io.terrible.app.domain.MediaFile;
 import io.terrible.directory.scanner.domain.MediaFileDto;
 import io.terrible.directory.scanner.service.ScanService;
+import java.io.IOException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.Job;
@@ -24,92 +26,93 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.task.TaskExecutor;
 import org.springframework.data.mongodb.core.MongoTemplate;
 
-import java.io.IOException;
-
 @Slf4j
 @Configuration
 @EnableBatchProcessing
 @RequiredArgsConstructor
 public class BatchDirectoryScan {
 
-    private final TaskExecutor taskExecutor;
+  private final TaskExecutor taskExecutor;
 
-    private final ScanService scanService;
+  private final ScanService scanService;
 
-    private final JobBuilderFactory jobBuilderFactory;
+  private final JobBuilderFactory jobBuilderFactory;
 
-    private final StepBuilderFactory stepBuilderFactory;
+  private final StepBuilderFactory stepBuilderFactory;
 
-    private final MongoTemplate mongoTemplate;
+  private final MongoTemplate mongoTemplate;
 
-    @StepScope
-    @Bean(name = "directoryScannerReader")
-    public ItemReader<MediaFileDto> reader(@Value("#{jobParameters['directory']}") final String directory) {
+  @StepScope
+  @Bean(name = "directoryScannerReader")
+  public ItemReader<MediaFileDto> reader(
+      @Value("#{jobParameters['directory']}") final String directory) {
 
-        log.info("Directory {}", directory);
+    log.info("Directory {}", directory);
 
-        try {
-            return new IteratorItemReader<>(scanService.scanMedia(directory));
-        } catch (IOException e) {
-            throw new RuntimeException("Stop everything. Unable to read from directory");
-        }
+    try {
+      return new IteratorItemReader<>(scanService.scanMedia(directory));
+    } catch (IOException e) {
+      throw new RuntimeException("Stop everything. Unable to read from directory");
+    }
+  }
 
+  @Bean(name = "directoryScannerProcessor")
+  public Processor processor() {
+
+    return new Processor();
+  }
+
+  @Bean(name = "directoryScannerWriter")
+  public ItemWriter<MediaFile> writer() {
+
+    final MongoItemWriter<MediaFile> writer = new MongoItemWriter<>();
+
+    try {
+      writer.setTemplate(mongoTemplate);
+    } catch (final Exception e) {
+      log.error(e.toString());
     }
 
-    @Bean(name = "directoryScannerProcessor")
-    public Processor processor() {
+    writer.setCollection("media-files");
 
-        return new Processor();
+    return writer;
+  }
+
+  @Bean(name = "directoryScannerStep")
+  public Step step() {
+
+    return stepBuilderFactory
+        .get("directoryScannerStep")
+        .<MediaFileDto, MediaFile>chunk(1)
+        .reader(reader(""))
+        .processor(processor())
+        .writer(writer())
+        .taskExecutor(taskExecutor)
+        .build();
+  }
+
+  @Bean(name = "directoryScannerJob")
+  public Job directoryScannerJob() {
+
+    return jobBuilderFactory
+        .get("directoryScannerJob")
+        .incrementer(new RunIdIncrementer())
+        .flow(step())
+        .end()
+        .build();
+  }
+
+  @RequiredArgsConstructor
+  static class Processor implements ItemProcessor<MediaFileDto, MediaFile> {
+
+    @Override
+    public MediaFile process(final MediaFileDto mediaFileDto) {
+
+      final MediaFile mediaFile = MediaFile.builder().build();
+
+      BeanUtils.copyProperties(mediaFileDto, mediaFile);
+
+      return mediaFile;
     }
-
-    @Bean(name = "directoryScannerWriter")
-    public ItemWriter<MediaFile> writer() {
-
-        final MongoItemWriter<MediaFile> writer = new MongoItemWriter<>();
-
-        try {
-            writer.setTemplate(mongoTemplate);
-        } catch (final Exception e) {
-            log.error(e.toString());
-        }
-
-        writer.setCollection("media-files");
-
-        return writer;
-    }
-
-    @Bean(name = "directoryScannerStep")
-    public Step step() {
-
-        return stepBuilderFactory.get("directoryScannerStep").<MediaFileDto, MediaFile>chunk(1).reader(reader(""))
-                .processor(processor())
-                .writer(writer())
-                .taskExecutor(taskExecutor)
-                .build();
-    }
-
-    @Bean(name = "directoryScannerJob")
-    public Job directoryScannerJob() {
-
-        return jobBuilderFactory.get("directoryScannerJob")
-                .incrementer(new RunIdIncrementer())
-                .flow(step())
-                .end()
-                .build();
-    }
-
-    @RequiredArgsConstructor
-    static class Processor implements ItemProcessor<MediaFileDto, MediaFile> {
-
-        @Override
-        public MediaFile process(final MediaFileDto mediaFileDto) {
-
-            final MediaFile mediaFile = MediaFile.builder().build();
-
-            BeanUtils.copyProperties(mediaFileDto, mediaFile);
-
-            return mediaFile;
-        }
-
-    }
+  }
 }

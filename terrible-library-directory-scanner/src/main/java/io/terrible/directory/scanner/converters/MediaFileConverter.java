@@ -3,11 +3,6 @@ package io.terrible.directory.scanner.converters;
 
 import com.google.common.hash.Hashing;
 import io.terrible.directory.scanner.domain.MediaFileDto;
-import lombok.experimental.UtilityClass;
-import lombok.extern.slf4j.Slf4j;
-
-import org.apache.commons.io.FilenameUtils;
-
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -18,6 +13,9 @@ import java.nio.file.attribute.BasicFileAttributeView;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import lombok.experimental.UtilityClass;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.io.FilenameUtils;
 
 /** Converts a file to a type of MediaFile */
 @Slf4j
@@ -112,7 +110,9 @@ public class MediaFileConverter {
 
   private String getId(final File file) {
     try {
-      return Hashing.murmur3_128().hashString(file.getCanonicalPath(), StandardCharsets.UTF_8).toString();
+      return Hashing.murmur3_128()
+          .hashString(file.getCanonicalPath(), StandardCharsets.UTF_8)
+          .toString();
     } catch (final IOException e) {
       return null;
     }

@@ -2,7 +2,6 @@
 package io.terrible.directory.scanner.service;
 
 import io.terrible.directory.scanner.domain.MediaFileDto;
-
 import java.io.IOException;
 import java.util.ArrayDeque;
 

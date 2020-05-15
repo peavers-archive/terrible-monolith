@@ -1,16 +1,5 @@
-plugins {
-    id 'org.springframework.boot' version '2.2.6.RELEASE'
-    id 'io.spring.dependency-management' version '1.0.8.RELEASE'
-    id 'java'
-}
-
 group = 'io.terrible.library.directory'
 version = '0.0.1-SNAPSHOT'
-sourceCompatibility = '11'
-
-repositories {
-    mavenCentral()
-}
 
 bootJar {
     enabled = false
@@ -21,29 +10,6 @@ jar {
 }
 
 dependencies {
+    // Spring
     implementation 'org.springframework.boot:spring-boot-starter'
-
-    compile group: 'io.projectreactor', name: 'reactor-core', version: '3.3.5.RELEASE'
-
-    // Apache
-    implementation 'org.apache.commons:commons-lang3:3.10'
-    implementation 'commons-io:commons-io:2.6'
-
-    // Other
-    implementation 'com.beust:jcommander:1.78'
-    implementation 'org.postgresql:postgresql:42.2.12'
-    implementation 'com.google.guava:guava:29.0-jre'
-
-    // Development
-    compileOnly 'org.projectlombok:lombok'
-    annotationProcessor 'org.projectlombok:lombok'
-
-    // Tests
-    testImplementation('org.springframework.boot:spring-boot-starter-test') {
-        exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
-    }
-}
-
-test {
-    useJUnitPlatform()
 }

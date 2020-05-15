@@ -1,12 +1,11 @@
 /* Licensed under Apache-2.0 */
 package io.terrible.app.configuration;
 
+import java.util.Collections;
 import org.springframework.context.annotation.Bean;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.reactive.CorsConfigurationSource;
 import org.springframework.web.cors.reactive.UrlBasedCorsConfigurationSource;
-
-import java.util.Collections;
 
 public class SecurityConfig {
 

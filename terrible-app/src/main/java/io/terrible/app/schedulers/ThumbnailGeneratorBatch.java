@@ -1,6 +1,8 @@
+/* Licensed under Apache-2.0 */
 package io.terrible.app.schedulers;
 
 import io.terrible.app.configuration.TerribleConfig;
+import java.util.Date;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.Job;
@@ -15,31 +17,30 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import java.util.Date;
-
 @Slf4j
 @Component
 @EnableScheduling
 @RequiredArgsConstructor
 public class ThumbnailGeneratorBatch {
 
-    private final TerribleConfig config;
+  private final TerribleConfig config;
 
-    private final SimpleJobLauncher simpleJobLauncher;
+  private final SimpleJobLauncher simpleJobLauncher;
 
-    @Qualifier("thumbnailGeneratorJob")
-    private final Job thumbnailGeneratorJob;
+  @Qualifier("thumbnailGeneratorJob")
+  private final Job thumbnailGeneratorJob;
 
-    @Scheduled(fixedDelayString = "${batch.delay}")
-    public void schedule()
-            throws JobParametersInvalidException, JobExecutionAlreadyRunningException, JobRestartException,
-            JobInstanceAlreadyCompleteException {
+  @Scheduled(fixedDelayString = "${batch.delay}")
+  public void schedule()
+      throws JobParametersInvalidException, JobExecutionAlreadyRunningException,
+          JobRestartException, JobInstanceAlreadyCompleteException {
 
-        if (config.isThumbnailJob()) {
-            log.info("Running job {}", thumbnailGeneratorJob.getName());
+    if (config.isThumbnailJob()) {
+      log.info("Running job {}", thumbnailGeneratorJob.getName());
 
-            simpleJobLauncher.run(thumbnailGeneratorJob, new JobParametersBuilder().addDate("date", new Date()).toJobParameters());
-        }
+      simpleJobLauncher.run(
+          thumbnailGeneratorJob,
+          new JobParametersBuilder().addDate("date", new Date()).toJobParameters());
     }
-
+  }
 }
