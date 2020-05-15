@@ -10,7 +10,7 @@ server:
 
 terrible:
   index: media
-  thumbnailJob: true
+  thumbnailJob: false
   directoryJob: true
   search-service:
     scheme: http
@@ -18,7 +18,7 @@ terrible:
     port: 8082
 
 batch:
-  delay: 60000 #milliseconds
+  delay: 900000 #milliseconds
 
 management:
   endpoints:

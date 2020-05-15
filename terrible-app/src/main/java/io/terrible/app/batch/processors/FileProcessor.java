@@ -6,12 +6,13 @@ import io.terrible.directory.scanner.domain.MediaFileDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.beans.BeanUtils;
+import org.springframework.lang.NonNull;
 
 @RequiredArgsConstructor
 public class FileProcessor implements ItemProcessor<MediaFileDto, MediaFile> {
 
   @Override
-  public MediaFile process(final MediaFileDto mediaFileDto) {
+  public MediaFile process(@NonNull final MediaFileDto mediaFileDto) {
 
     final MediaFile mediaFile = MediaFile.builder().build();
 

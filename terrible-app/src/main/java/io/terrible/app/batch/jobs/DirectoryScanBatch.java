@@ -2,11 +2,12 @@
 package io.terrible.app.batch.jobs;
 
 import io.terrible.app.batch.processors.FileProcessor;
+import io.terrible.app.batch.tasklet.SearchIndexTasklet;
 import io.terrible.app.batch.writers.MongoReactiveWriter;
 import io.terrible.app.domain.MediaFile;
+import io.terrible.app.services.SearchService;
 import io.terrible.directory.scanner.domain.MediaFileDto;
 import io.terrible.directory.scanner.service.ScanService;
-import java.io.IOException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.Job;
@@ -24,11 +25,15 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.mongodb.core.ReactiveMongoTemplate;
 
+import java.io.IOException;
+
 @Slf4j
 @Configuration
 @EnableBatchProcessing
 @RequiredArgsConstructor
 public class DirectoryScanBatch {
+
+  private final SearchService searchService;
 
   private final ScanService scanService;
 
@@ -39,31 +44,30 @@ public class DirectoryScanBatch {
   private final ReactiveMongoTemplate reactiveMongoTemplate;
 
   @StepScope
-  @Bean(name = "directoryScannerReader")
-  public ItemReader<MediaFileDto> reader(
-      @Value("#{jobParameters['directory']}") final String directory) {
+  @Bean(name = "directoryScanReader")
+  public ItemReader<MediaFileDto> reader(@Value("#{jobParameters['directory']}") final String dir) {
 
     try {
-      return new IteratorItemReader<>(scanService.scanMedia(directory));
+      return new IteratorItemReader<>(scanService.scanMedia(dir));
     } catch (IOException e) {
       throw new RuntimeException("Stop everything. Unable to read from directory");
     }
   }
 
-  @Bean(name = "directoryScannerProcessor")
+  @Bean(name = "directoryScanProcessor")
   public FileProcessor processor() {
 
     return new FileProcessor();
   }
 
-  @Bean(name = "directoryScannerWriter")
+  @Bean(name = "directoryScanWriter")
   public ItemWriter<MediaFile> writer() {
 
     return new MongoReactiveWriter<>(reactiveMongoTemplate);
   }
 
   @Bean(name = "directoryScannerStep")
-  public Step step() {
+  public Step directoryScannerStep() {
 
     return stepBuilderFactory
         .get("directoryScannerStep")
@@ -74,14 +78,22 @@ public class DirectoryScanBatch {
         .build();
   }
 
+  @Bean(name = "searchIndexStep")
+  public Step searchIndexStep() {
+    return stepBuilderFactory
+        .get("searchIndexStep")
+        .tasklet(new SearchIndexTasklet(searchService))
+        .build();
+  }
+
   @Bean(name = "directoryScannerJob")
   public Job directoryScannerJob() {
 
     return jobBuilderFactory
         .get("directoryScannerJob")
         .incrementer(new RunIdIncrementer())
-        .flow(step())
-        .end()
+        .start(directoryScannerStep())
+        .next(searchIndexStep())
         .build();
   }
 }

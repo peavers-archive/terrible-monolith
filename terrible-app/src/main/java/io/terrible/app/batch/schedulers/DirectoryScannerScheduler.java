@@ -4,7 +4,6 @@ package io.terrible.app.batch.schedulers;
 import io.terrible.app.configuration.TerribleConfig;
 import io.terrible.app.domain.Directory;
 import io.terrible.app.services.DirectoryService;
-import java.util.Date;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.Job;
@@ -14,9 +13,12 @@ import org.springframework.batch.core.launch.support.SimpleJobLauncher;
 import org.springframework.batch.core.repository.JobExecutionAlreadyRunningException;
 import org.springframework.batch.core.repository.JobInstanceAlreadyCompleteException;
 import org.springframework.batch.core.repository.JobRestartException;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+
+import java.util.Date;
 
 @Slf4j
 @Component
@@ -30,6 +32,7 @@ public class DirectoryScannerScheduler {
 
   private final DirectoryService directoryService;
 
+  @Qualifier("directoryScannerJob")
   private final Job directoryScannerJob;
 
   @Scheduled(fixedDelayString = "${batch.delay}")

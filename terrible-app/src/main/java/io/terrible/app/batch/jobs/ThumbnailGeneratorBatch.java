@@ -66,13 +66,13 @@ public class ThumbnailGeneratorBatch {
     return jobBuilderFactory
         .get("thumbnailGeneratorJob")
         .incrementer(new RunIdIncrementer())
-        .flow(partitionedStep(step()))
+        .flow(partitionedStep(thumbnailGeneratorStep()))
         .end()
         .build();
   }
 
   @Bean(name = "thumbnailGeneratorStep")
-  public Step step() {
+  public Step thumbnailGeneratorStep() {
 
     return stepBuilderFactory
         .get("thumbnailGeneratorStep")
@@ -83,7 +83,7 @@ public class ThumbnailGeneratorBatch {
         .build();
   }
 
-  @Bean
+  @Bean(name = "partitionedStep")
   public Step partitionedStep(Step thumbnailGeneratorStep) {
 
     return stepBuilderFactory
