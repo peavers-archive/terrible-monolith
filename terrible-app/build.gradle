@@ -42,9 +42,6 @@ dependencies {
 
     // Apache
     implementation 'org.apache.commons:commons-lang3:3.10'
-
-    // Apache
-    implementation 'org.apache.commons:commons-lang3:3.10'
     implementation 'commons-io:commons-io:2.6'
 
     // Google

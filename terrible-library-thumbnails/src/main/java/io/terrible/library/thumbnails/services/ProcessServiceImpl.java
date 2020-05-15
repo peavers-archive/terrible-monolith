@@ -11,6 +11,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -22,16 +23,16 @@ public class ProcessServiceImpl implements ProcessService {
     @Override
     public String execute(final List<String> command) throws IOException, InterruptedException {
 
-        //    log.info("command {}", Arrays.toString(command.toArray()).replace(",", ""));
+//        log.debug("command {}", Arrays.toString(command.toArray()).replace(",", ""));
 
-        final ProcessBuilder processBuilder = new ProcessBuilder(command).inheritIO();
+        final ProcessBuilder processBuilder = new ProcessBuilder(command);
         final Process process = processBuilder.start();
         final String output = readConsole(process.getInputStream());
         final String error = readConsole(process.getErrorStream());
 
         process.waitFor();
 
-        //    logResult(output, error);
+        logResult(output, error);
 
         process.getInputStream().close();
         process.getErrorStream().close();

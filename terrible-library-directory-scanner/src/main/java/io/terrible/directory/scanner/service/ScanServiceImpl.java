@@ -16,7 +16,6 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.filefilter.TrueFileFilter;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
-import reactor.core.publisher.Flux;
 
 @Slf4j
 @Service
@@ -24,7 +23,7 @@ import reactor.core.publisher.Flux;
 public class ScanServiceImpl implements ScanService {
 
   @Override
-  public Flux<MediaFileDto> scanMedia(final String input) throws IOException {
+  public ArrayDeque<MediaFileDto> scanMedia(final String input) throws IOException {
 
     final Collection<File> files =
             FileUtils.listFiles(new File(input), TrueFileFilter.INSTANCE, TrueFileFilter.INSTANCE);
@@ -42,6 +41,6 @@ public class ScanServiceImpl implements ScanService {
       }
     }
 
-    return Flux.fromIterable(results);
+    return results;
   }
 }

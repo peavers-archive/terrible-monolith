@@ -2,11 +2,11 @@
 package io.terrible.directory.scanner.service;
 
 import io.terrible.directory.scanner.domain.MediaFileDto;
-import reactor.core.publisher.Flux;
 
 import java.io.IOException;
+import java.util.ArrayDeque;
 
 public interface ScanService {
 
-  Flux<MediaFileDto> scanMedia(String directory) throws IOException;
+  ArrayDeque<MediaFileDto> scanMedia(String directory) throws IOException;
 }

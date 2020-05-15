@@ -10,13 +10,15 @@ server:
 
 terrible:
   index: media
+  thumbnailJob: false
+  directoryJob: true
   search-service:
     scheme: http
     host: localhost
     port: 8082
 
 batch:
-  delay: 60000
+  delay: 60000 #milliseconds
 
 management:
   endpoints:

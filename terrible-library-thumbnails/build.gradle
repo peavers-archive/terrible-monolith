@@ -26,6 +26,7 @@ dependencies {
     // Apache
     implementation 'org.apache.commons:commons-lang3:3.10'
     implementation 'commons-io:commons-io:2.6'
+    compile group: 'org.apache.commons', name: 'commons-math3', version: '3.6.1'
 
     // Development
     compileOnly 'org.projectlombok:lombok'
