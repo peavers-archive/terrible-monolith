@@ -8,6 +8,7 @@ import io.terrible.app.domain.MediaFile;
 import io.terrible.app.services.SearchService;
 import io.terrible.directory.scanner.domain.MediaFileDto;
 import io.terrible.directory.scanner.service.ScanService;
+import java.io.IOException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.Job;
@@ -24,8 +25,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.mongodb.core.ReactiveMongoTemplate;
-
-import java.io.IOException;
 
 @Slf4j
 @Configuration
@@ -48,7 +47,7 @@ public class DirectoryScanBatch {
   public ItemReader<MediaFileDto> reader(@Value("#{jobParameters['directory']}") final String dir) {
 
     try {
-      return new IteratorItemReader<>(scanService.scanMedia(dir));
+      return new IteratorItemReader<>(scanService.scanVideos(dir));
     } catch (IOException e) {
       throw new RuntimeException("Stop everything. Unable to read from directory");
     }

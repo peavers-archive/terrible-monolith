@@ -4,11 +4,6 @@ package io.terrible.directory.scanner.service;
 import com.google.common.net.MediaType;
 import io.terrible.directory.scanner.converters.MediaFileConverter;
 import io.terrible.directory.scanner.domain.MediaFileDto;
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.util.ArrayDeque;
-import java.util.Collection;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
@@ -16,13 +11,19 @@ import org.apache.commons.io.filefilter.TrueFileFilter;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.util.ArrayDeque;
+import java.util.Collection;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class ScanServiceImpl implements ScanService {
 
   @Override
-  public ArrayDeque<MediaFileDto> scanMedia(final String input) throws IOException {
+  public ArrayDeque<MediaFileDto> scanVideos(final String input) throws IOException {
 
     final Collection<File> files =
         FileUtils.listFiles(new File(input), TrueFileFilter.INSTANCE, TrueFileFilter.INSTANCE);
@@ -38,6 +39,26 @@ public class ScanServiceImpl implements ScanService {
           && MediaType.parse(mimeType).is(MediaType.ANY_VIDEO_TYPE)) {
 
         results.add(MediaFileConverter.convert(file));
+      }
+    }
+
+    return results;
+  }
+
+  @Override
+  public ArrayDeque<File> scanPictures(final String input) throws IOException {
+
+    final Collection<File> files = FileUtils.listFiles(new File(input), TrueFileFilter.INSTANCE, null);
+
+    final ArrayDeque<File> results = new ArrayDeque<>(files.size());
+
+    for (final File file : files) {
+      final String mimeType = Files.probeContentType(file.toPath());
+
+      //noinspection UnstableApiUsage
+      if (StringUtils.isNoneEmpty(mimeType)
+          && MediaType.parse(mimeType).is(MediaType.ANY_IMAGE_TYPE)) {
+        results.add(file);
       }
     }
 

@@ -1,3 +1,4 @@
+/* Licensed under Apache-2.0 */
 package io.terrible.app.batch.tasklet;
 
 import io.terrible.app.services.SearchService;
@@ -15,7 +16,8 @@ public class SearchIndexTasklet implements Tasklet {
   private final SearchService searchService;
 
   @Override
-  public RepeatStatus execute(final StepContribution contribution, final ChunkContext chunkContext) {
+  public RepeatStatus execute(
+      final StepContribution contribution, final ChunkContext chunkContext) {
     searchService.createIndex("media").then(searchService.populate("media")).subscribe();
 
     return null;

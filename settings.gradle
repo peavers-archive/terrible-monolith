@@ -1,5 +1,6 @@
 rootProject.name = 'terrible-monolith'
 
 include 'terrible-app'
+include 'terrible-library-face-finder'
 include 'terrible-library-thumbnails'
 include 'terrible-library-directory-scanner'

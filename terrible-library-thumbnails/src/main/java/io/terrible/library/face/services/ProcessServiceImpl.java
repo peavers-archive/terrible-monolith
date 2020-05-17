@@ -1,5 +1,5 @@
 /* Licensed under Apache-2.0 */
-package io.terrible.library.thumbnails.services;
+package io.terrible.library.face.services;
 
 import java.io.BufferedReader;
 import java.io.IOException;

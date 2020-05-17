@@ -1,5 +1,5 @@
 /* Licensed under Apache-2.0 */
-package io.terrible.library.thumbnails.utils;
+package io.terrible.library.face.utils;
 
 import java.util.ArrayList;
 import lombok.experimental.UtilityClass;

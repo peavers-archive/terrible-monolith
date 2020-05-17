@@ -11,7 +11,7 @@ server:
 terrible:
   index: media
   thumbnailJob: false
-  directoryJob: true
+  directoryJob: false
   search-service:
     scheme: http
     host: localhost

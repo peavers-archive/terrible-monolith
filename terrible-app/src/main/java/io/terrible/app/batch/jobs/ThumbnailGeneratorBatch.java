@@ -6,7 +6,7 @@ import io.terrible.app.batch.readers.MongoReactiveReader;
 import io.terrible.app.batch.writers.MongoReactiveWriter;
 import io.terrible.app.domain.MediaFile;
 import io.terrible.app.services.MediaFileService;
-import io.terrible.library.thumbnails.services.ThumbnailService;
+import io.terrible.library.face.services.ThumbnailService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.Job;

@@ -1,9 +1,9 @@
 /* Licensed under Apache-2.0 */
-package io.terrible.library.thumbnails.services;
+package io.terrible.library.face.services;
 
 import static org.apache.commons.math3.util.FastMath.round;
 
-import io.terrible.library.thumbnails.utils.CommandUtil;
+import io.terrible.library.face.utils.CommandUtil;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
