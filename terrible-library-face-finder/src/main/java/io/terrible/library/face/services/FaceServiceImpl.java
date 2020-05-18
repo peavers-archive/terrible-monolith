@@ -1,6 +1,7 @@
 /* Licensed under Apache-2.0 */
 package io.terrible.library.face.services;
 
+import jdk.dynalink.beans.StaticClass;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
@@ -9,9 +10,11 @@ import org.opencv.core.Mat;
 import org.opencv.core.MatOfRect;
 import org.opencv.core.Point;
 import org.opencv.core.Scalar;
+import org.opencv.core.Size;
 import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
 import org.opencv.objdetect.CascadeClassifier;
+import org.opencv.objdetect.Objdetect;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
@@ -33,11 +36,13 @@ public class FaceServiceImpl implements FaceService {
   public FaceServiceImpl() {
     System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
 
-    classifiers.put("haarcascades_smile", "haarcascades/haarcascade_smile.xml");
-    classifiers.put("haarcascades_eye", "haarcascades/haarcascade_eye.xml");
+    //    classifiers.put("haarcascades_smile", "haarcascades/haarcascade_smile.xml");
+    //    classifiers.put("haarcascades_eye", "haarcascades/haarcascade_eye.xml");
     classifiers.put("haarcascades_frontalface_alt", "haarcascades/haarcascade_frontalface_alt.xml");
-    classifiers.put("haarcascades_frontalface_alt2", "haarcascades/haarcascade_frontalface_alt2.xml");
-    classifiers.put("haarcascades_cuda_frontalface_alt2", "haarcascades_cuda/haarcascade_frontalface_alt2.xml");
+    //    classifiers.put("haarcascades_frontalface_alt2",
+    // "haarcascades/haarcascade_frontalface_alt2.xml");
+    //    classifiers.put("haarcascades_cuda_frontalface_alt2",
+    // "haarcascades_cuda/haarcascade_frontalface_alt2.xml");
   }
 
   @Override
@@ -50,13 +55,18 @@ public class FaceServiceImpl implements FaceService {
           image -> {
             Mat src = Imgcodecs.imread(image.toString());
 
-            MatOfRect faceDetections = new MatOfRect();
+            Mat grayFrame = new Mat();
+
+            MatOfRect faces = new MatOfRect();
 
             final CascadeClassifier classifier = loadClassifier(entry.getValue());
 
-            classifier.detectMultiScale(src, faceDetections);
+            Imgproc.cvtColor(src, grayFrame, Imgproc.COLOR_BGR2GRAY);
+            Imgproc.equalizeHist(grayFrame, grayFrame);
 
-            drawBoxes(faceDetections, src);
+            classifier.detectMultiScale(grayFrame, faces, 1.1, 2);
+
+            drawBoxes(faces, src);
 
             final String outputFile = createOutputFile(outputDirectory, image);
 
@@ -73,7 +83,7 @@ public class FaceServiceImpl implements FaceService {
                     src,
                     new Point(rect.x, rect.y),
                     new Point(rect.x + rect.width, rect.y + rect.height),
-                    new Scalar(0, 0, 255),
+                    new Scalar(0, 255, 0),
                     2));
   }
 
