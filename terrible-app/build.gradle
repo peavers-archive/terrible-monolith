@@ -30,6 +30,7 @@ dependencies {
     implementation 'io.micrometer:micrometer-registry-prometheus'
 
     // Terrible
+    implementation project(':terrible-library-search')
     implementation project(':terrible-library-thumbnails')
     implementation project(':terrible-library-face-finder')
     implementation project(':terrible-library-directory-scanner')

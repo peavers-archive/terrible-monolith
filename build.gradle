@@ -47,11 +47,6 @@ allprojects {
         useJUnitPlatform()
     }
 
-    spotbugs {
-        ignoreFailures = false
-        showProgress = true
-    }
-
     spotless {
         java {
             licenseHeader '/* Licensed under Apache-2.0 */'

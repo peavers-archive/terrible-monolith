@@ -10,12 +10,8 @@ server:
 
 terrible:
   index: media
-  thumbnailJob: false
-  directoryJob: false
-  search-service:
-    scheme: http
-    host: localhost
-    port: 8082
+  thumbnailJob: true
+  directoryJob: true
 
 batch:
   delay: 900000 #milliseconds

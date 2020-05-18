@@ -1,8 +1,8 @@
 /* Licensed under Apache-2.0 */
 package io.terrible.app.controller;
 
-import io.terrible.app.domain.MediaFile;
-import io.terrible.app.services.SearchService;
+import io.terrible.search.domain.MediaFileDto;
+import io.terrible.search.services.SearchService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -21,23 +21,19 @@ import reactor.core.publisher.Mono;
 @RequiredArgsConstructor
 public class SearchController {
 
+  public static final String INDEX = "media-files";
+
   private final SearchService searchService;
 
-  @GetMapping("/index")
-  public Mono<String> index() {
-
-    return searchService.createIndex("media").then(searchService.populate("media"));
-  }
-
   @GetMapping
-  public Flux<MediaFile> search(@RequestParam final String query) {
+  public Flux<MediaFileDto> search(@RequestParam final String query) {
 
-    return searchService.search(query);
+    return searchService.search(INDEX, query);
   }
 
   @DeleteMapping
   public Mono<Void> deleteAll() {
 
-    return searchService.deleteIndex();
+    return searchService.deleteIndex(INDEX);
   }
 }

@@ -5,10 +5,12 @@ import io.terrible.app.batch.processors.FileProcessor;
 import io.terrible.app.batch.tasklet.SearchIndexTasklet;
 import io.terrible.app.batch.writers.MongoReactiveWriter;
 import io.terrible.app.domain.MediaFile;
-import io.terrible.app.services.SearchService;
+import io.terrible.app.services.MediaFileService;
 import io.terrible.directory.scanner.domain.MediaFileDto;
 import io.terrible.directory.scanner.service.ScanService;
 import java.io.IOException;
+
+import io.terrible.search.services.SearchService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.Job;
@@ -33,6 +35,8 @@ import org.springframework.data.mongodb.core.ReactiveMongoTemplate;
 public class DirectoryScanBatch {
 
   private final SearchService searchService;
+
+  private final MediaFileService mediaFileService;
 
   private final ScanService scanService;
 
@@ -81,7 +85,7 @@ public class DirectoryScanBatch {
   public Step searchIndexStep() {
     return stepBuilderFactory
         .get("searchIndexStep")
-        .tasklet(new SearchIndexTasklet(searchService))
+        .tasklet(new SearchIndexTasklet(searchService, mediaFileService))
         .build();
   }
 
