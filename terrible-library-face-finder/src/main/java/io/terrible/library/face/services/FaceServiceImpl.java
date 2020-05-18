@@ -61,8 +61,6 @@ public class FaceServiceImpl implements FaceService {
 
   private void drawBoxes(MatOfRect faceDetections, Mat src) {
 
-    log.info("Drawing #{} boxes", faceDetections.total());
-
     Arrays.stream(faceDetections.toArray())
         .forEach(
             rect ->
