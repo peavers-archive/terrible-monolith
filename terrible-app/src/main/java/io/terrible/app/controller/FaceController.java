@@ -30,15 +30,17 @@ public class FaceController {
 
   private final ScanService scanService;
 
+  private final String TEST_DIR = "/home/chris/Downloads/test-sample";
+
   @GetMapping("/face")
   public Mono<Void> detect() throws IOException {
 
-    final ArrayDeque<File> files = scanService.scanPictures("/home/chris/Downloads/test-sample");
+    final ArrayDeque<File> files = scanService.scanPictures(TEST_DIR);
 
     ArrayList<Path> paths =
         files.stream().map(File::toPath).collect(Collectors.toCollection(ArrayList::new));
 
-    faceService.detect(paths);
+    faceService.detect(paths, TEST_DIR);
 
     return Mono.empty();
   }

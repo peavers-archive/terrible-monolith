@@ -4,18 +4,17 @@ package io.terrible.directory.scanner.service;
 import com.google.common.net.MediaType;
 import io.terrible.directory.scanner.converters.MediaFileConverter;
 import io.terrible.directory.scanner.domain.MediaFileDto;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.util.ArrayDeque;
+import java.util.Collection;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.filefilter.TrueFileFilter;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
-
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.util.ArrayDeque;
-import java.util.Collection;
 
 @Slf4j
 @Service
@@ -48,7 +47,8 @@ public class ScanServiceImpl implements ScanService {
   @Override
   public ArrayDeque<File> scanPictures(final String input) throws IOException {
 
-    final Collection<File> files = FileUtils.listFiles(new File(input), TrueFileFilter.INSTANCE, null);
+    final Collection<File> files =
+        FileUtils.listFiles(new File(input), TrueFileFilter.INSTANCE, null);
 
     final ArrayDeque<File> results = new ArrayDeque<>(files.size());
 
