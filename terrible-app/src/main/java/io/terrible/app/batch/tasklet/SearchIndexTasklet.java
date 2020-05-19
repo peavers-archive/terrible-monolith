@@ -31,13 +31,13 @@ public class SearchIndexTasklet implements Tasklet {
         .createIndex(INDEX)
         .doOnSuccess(
             (value) ->
-                searchService.populate(INDEX, mediaFileService.findAll().map(this::converter)).subscribe())
+                searchService.populate(INDEX, mediaFileService.findAll().map(this::convertActualToDto)).subscribe())
         .subscribe();
 
     return null;
   }
 
-  private MediaFileDto converter(final MediaFile mediaFile) {
+  private MediaFileDto convertActualToDto(final MediaFile mediaFile) {
 
     final MediaFileDto mediaFileDto = MediaFileDto.builder().build();
 

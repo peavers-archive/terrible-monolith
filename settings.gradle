@@ -6,4 +6,3 @@ include 'terrible-library-face-finder'
 include 'terrible-library-thumbnails'
 include 'terrible-library-directory-scanner'
 include 'terrible-library-search'
-
