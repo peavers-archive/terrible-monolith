@@ -39,7 +39,7 @@ Pushes all records from MongoDB into ElasticSearch and handles queries to and fr
 The `terrible-library-face-finder` requires the OpenCV native bindings to be on the library path of the JVM. 
 This can be achieved using: 
 ```
-`-Djava.library.path=$PROJECT_DIR$/terrible-library-face-finder/lib/native
+-Djava.library.path=$PROJECT_DIR$/terrible-library-face-finder/lib/native
 ```  
 
 ## Dev

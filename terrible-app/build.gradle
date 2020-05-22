@@ -17,10 +17,6 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-webflux'
     implementation 'org.springframework.boot:spring-boot-starter-data-mongodb-reactive'
 
-    // Spring Batch
-    implementation 'org.springframework.boot:spring-boot-starter-batch'
-    runtimeOnly 'org.hsqldb:hsqldb'
-
     // Jackson addons
     implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'
 
@@ -31,9 +27,7 @@ dependencies {
 
     // Terrible
     implementation project(':terrible-library-search')
-    implementation project(':terrible-library-thumbnails')
     implementation project(':terrible-library-face-finder')
-    implementation project(':terrible-library-directory-scanner')
 }
 
 dependencyManagement {

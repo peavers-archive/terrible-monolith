@@ -1,20 +1,9 @@
 spring:
   application:
     name: terrible-api-service
-  batch:
-    job:
-      enabled: false
 
 server:
-  port: 8081
-
-terrible:
-  index: media
-  thumbnailJob: true
-  directoryJob: true
-
-batch:
-  delay: 900000 #milliseconds
+  port: 8080
 
 management:
   endpoints:

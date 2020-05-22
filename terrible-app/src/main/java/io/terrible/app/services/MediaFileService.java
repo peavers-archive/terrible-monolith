@@ -6,11 +6,11 @@ import io.terrible.app.domain.MediaFile;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.util.List;
+
 public interface MediaFileService {
 
   Flux<MediaFile> findAll();
-
-  Flux<MediaFile> findAllWithoutThumbnails();
 
   Flux<GroupedMediaFile> findAllGroupedByDate(String dateField);
 
