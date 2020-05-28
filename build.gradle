@@ -28,7 +28,7 @@ allprojects {
     dependencies {
         // Apache
         implementation 'org.apache.commons:commons-lang3:3.10'
-        implementation 'commons-io:commons-io:2.6'
+        implementation 'commons-io:commons-io:2.7'
 
         // Google
         implementation 'com.google.guava:guava:29.0-jre'
