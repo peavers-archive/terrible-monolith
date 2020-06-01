@@ -1,8 +1,8 @@
 plugins {
     id 'org.springframework.boot' version '2.3.0.RELEASE'
     id 'io.spring.dependency-management' version '1.0.9.RELEASE'
-    id 'com.diffplug.gradle.spotless' version '3.30.0'
-    id "com.github.spotbugs" version "4.2.0"
+    id 'com.diffplug.gradle.spotless' version '4.0.1'
+    id "com.github.spotbugs" version "4.2.4"
     id 'com.google.cloud.tools.jib' version '2.3.0' apply false
     id 'java'
 }
@@ -29,7 +29,7 @@ allprojects {
     dependencies {
         // Apache
         implementation 'org.apache.commons:commons-lang3:3.10'
-        implementation 'commons-io:commons-io:2.6'
+        implementation 'commons-io:commons-io:2.7'
 
         // Google
         implementation 'com.google.guava:guava:29.0-jre'
