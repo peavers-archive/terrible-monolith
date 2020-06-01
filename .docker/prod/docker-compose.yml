@@ -1,0 +1,81 @@
+version: '3.4'
+services:
+
+  terrible-spa:
+    image: peavers/terrible-spa:latest
+    container_name: terrible-spa
+    ports:
+      - "80:80"
+    depends_on:
+      - terrible-monolith
+    links:
+      - terrible-monolith
+    logging:
+      options:
+        max-size: "2m"
+        max-file: "5"
+
+  terrible-monolith:
+    image: peavers/terrible-monolith:latest
+    container_name: terrible-monolith
+    expose:
+      - "8080"
+    ports:
+      - "8080:8080"
+    volumes:
+      - ${TERRIBLE_MEDIA}:/terrible-media
+    environment:
+      - SPRING_PROFILES_ACTIVE=production
+    depends_on:
+      - terrible-mongo
+      - terrible-search
+    logging:
+      options:
+        max-size: "2m"
+        max-file: "5"
+
+  terrible-batch:
+    image: peavers/terrible-batch:latest
+    container_name: terrible-batch
+    volumes:
+      - ${TERRIBLE_MEDIA}:/terrible-media
+    environment:
+      - SPRING_PROFILES_ACTIVE=production
+    depends_on:
+      - terrible-mongo
+      - terrible-search
+    logging:
+      options:
+        max-size: "2m"
+        max-file: "5"
+
+  terrible-mongo:
+    image: mongo:latest
+    container_name: terrible-mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+    logging:
+      options:
+        max-size: "2m"
+        max-file: "5"
+
+  terrible-search:
+    image: elasticsearch:7.6.1
+    container_name: terrible-search
+    environment:
+      - discovery.type=single-node
+    volumes:
+      - elastic-data:/usr/share/elasticsearch/dat
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+    logging:
+      options:
+        max-size: "2m"
+        max-file: "5"
+
+volumes:
+  mongo-data:
+  elastic-data:

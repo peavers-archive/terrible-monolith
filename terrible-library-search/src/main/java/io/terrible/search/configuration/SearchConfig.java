@@ -18,7 +18,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class SearchConfig {
 
-  public static final String HOSTNAME = "localhost";
+  public static final String HOSTNAME = "terrible-search";
 
   public static final int PORT = 9200;
 

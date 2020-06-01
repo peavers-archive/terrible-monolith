@@ -19,3 +19,12 @@ management:
       enabled: true
     metrics:
       enabled: true
+
+---
+spring:
+  profiles: production
+  data:
+    mongodb:
+      host: terrible-mongo
+  webflux:
+    base-path: /api
