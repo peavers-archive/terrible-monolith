@@ -6,22 +6,15 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.terrible.search.domain.MediaFileDto;
 import lombok.extern.slf4j.Slf4j;
 import org.elasticsearch.search.SearchHit;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Slf4j
 @Component
 public class JsonUtil {
 
-  private static ObjectMapper objectMapper;
-
-  @Autowired
-  public JsonUtil(final ObjectMapper objectMapper) {
-
-    JsonUtil.objectMapper = objectMapper;
-  }
-
   public static String toJson(final MediaFileDto mediaFileDto) {
+
+    ObjectMapper objectMapper = new ObjectMapper();
 
     try {
       return objectMapper.writeValueAsString(mediaFileDto);
@@ -33,6 +26,8 @@ public class JsonUtil {
   }
 
   public static MediaFileDto convertSourceMap(final SearchHit searchHit) {
+
+    ObjectMapper objectMapper = new ObjectMapper();
 
     final MediaFileDto mediaFileDto =
         objectMapper.convertValue(searchHit.getSourceAsMap(), MediaFileDto.class);
