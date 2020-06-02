@@ -23,9 +23,11 @@ services:
     ports:
       - "8080:8080"
     volumes:
-      - ${TERRIBLE_MEDIA}:/terrible-media
+      - ${TERRIBLE_MEDIA}:/terrible/terrible-media
+      - ${TERRIBLE_THUMBNAILS}:/terrible/terrible-thumbnails
     environment:
       - SPRING_PROFILES_ACTIVE=production
+      - JAVA_TOOL_OPTIONS=-Dfile.encoding=UTF-8
     depends_on:
       - terrible-mongo
       - terrible-search
@@ -38,9 +40,11 @@ services:
     image: peavers/terrible-batch:latest
     container_name: terrible-batch
     volumes:
-      - ${TERRIBLE_MEDIA}:/terrible-media
+      - ${TERRIBLE_MEDIA}:/terrible/terrible-media
+      - ${TERRIBLE_THUMBNAILS}:/terrible/terrible-thumbnails
     environment:
       - SPRING_PROFILES_ACTIVE=production
+      - JAVA_TOOL_OPTIONS=-Dfile.encoding=UTF-8
     depends_on:
       - terrible-mongo
       - terrible-search

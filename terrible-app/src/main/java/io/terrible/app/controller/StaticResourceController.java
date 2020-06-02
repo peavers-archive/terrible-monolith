@@ -11,9 +11,11 @@ import org.springframework.core.io.Resource;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @Slf4j
@@ -32,7 +34,7 @@ public class StaticResourceController {
   }
 
   @GetMapping(value = "/video", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
-  public Mono<Resource> video(@RequestParam final String id) {
+  public Mono<FileSystemResource> video(@RequestParam final String id) {
 
     return mediaFileService.findById(id).map(MediaFile::getPath).map(FileSystemResource::new);
   }
