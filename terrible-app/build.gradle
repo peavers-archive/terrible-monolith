@@ -29,6 +29,14 @@ dependencies {
 }
 
 jib {
+    tags = [version, 'latest']
+    auth {
+        username = System.getenv('DOCKER_USER')
+        password = System.getenv('DOCKER_PASS')
+    }
+    from {
+        image = 'peavers/terrible-base-ffmpeg-java:latest'
+    }
     to {
         image = 'peavers/terrible-monolith'
     }
