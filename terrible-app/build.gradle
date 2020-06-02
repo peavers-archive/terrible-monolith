@@ -29,15 +29,26 @@ dependencies {
 }
 
 jib {
-    tags = [version, 'latest']
-    auth {
-        username = System.getenv('DOCKER_USER')
-        password = System.getenv('DOCKER_PASS')
-    }
     from {
-        image = 'peavers/terrible-base-ffmpeg-java:latest'
+        image = 'peavers/terrible-docker-base:latest'
+        auth {
+            username = System.getenv("DOCKER_USER")
+            password = System.getenv("DOCKER_PASS")
+        }
     }
     to {
         image = 'peavers/terrible-monolith'
+        auth {
+            username = System.getenv("DOCKER_USER")
+            password = System.getenv("DOCKER_PASS")
+        }
+        tags = ["latest", "${project.name}-${project.version}".toString()]
+    }
+    container {
+        creationTime = "USE_CURRENT_TIMESTAMP"
+        jvmFlags = ['-Dspring.profiles.active=production', '-XX:+UseContainerSupport', '-Dserver.port=8080', '-Dfile.encoding=UTF-8']
+        ports = ['8080']
+        labels = [maintainer: 'Chris <peavers@gmail.com>']
+        user = "nobody:nogroup"
     }
 }

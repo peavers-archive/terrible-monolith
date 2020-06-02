@@ -33,14 +33,14 @@ services:
     ports:
       - "3000:3000"
     network_mode: host
- 
+
   prometheus:
     image: "prom/prometheus"
     container_name: terrible-prometheus
     ports:
-       - "9090:9090"
+      - "9090:9090"
     volumes:
-       - ./prometheus.yml:/etc/prometheus/prometheus.yml
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
     network_mode: host
 
 volumes:
