@@ -6,18 +6,22 @@ import io.terrible.app.repository.MediaListRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @Slf4j
 @Service
+@CacheConfig(cacheNames = "media-files")
 @RequiredArgsConstructor
 public class MediaListServiceImpl implements MediaListService {
 
   private final MediaListRepository repository;
 
   @Override
+  @Cacheable()
   public Flux<MediaList> findAll(final String filter) {
 
     return StringUtils.isNotEmpty(filter)

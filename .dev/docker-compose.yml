@@ -1,22 +1,29 @@
 version: '3.4'
 services:
-  mongo-express:
-    image: mongo-express
+
+  terrible-mongo-express:
+    image: mongo-express:latest
     container_name: terrible-mongo-express
+    environment:
+      - ME_CONFIG_MONGODB_SERVER=terrible-mongo
     ports:
       - 9000:8081
     links:
-      - mongo
+      - terrible-mongo
 
-  mongo:
-    image: mongo
+  terrible-mongo:
+    image: mongo:latest
     container_name: terrible-mongo
     ports:
       - "27017:27017"
     volumes:
       - mongo-data:/data/db
+    logging:
+      options:
+        max-size: "2m"
+        max-file: "5"
 
-  elastic:
+  terrible-search:
     image: elasticsearch:7.6.1
     container_name: terrible-search
     environment:
@@ -26,22 +33,10 @@ services:
     ports:
       - "9200:9200"
       - "9300:9300"
-
-  grafana:
-    image: "grafana/grafana"
-    container_name: terrible-grafana
-    ports:
-      - "3000:3000"
-    network_mode: host
-
-  prometheus:
-    image: "prom/prometheus"
-    container_name: terrible-prometheus
-    ports:
-      - "9090:9090"
-    volumes:
-      - ./prometheus.yml:/etc/prometheus/prometheus.yml
-    network_mode: host
+    logging:
+      options:
+        max-size: "2m"
+        max-file: "5"
 
 volumes:
   mongo-data:

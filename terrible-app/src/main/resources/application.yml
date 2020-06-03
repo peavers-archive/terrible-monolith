@@ -20,6 +20,11 @@ management:
     metrics:
       enabled: true
 
+search:
+  host: "localhost"
+  port: 9200
+  scheme: "http"
+  
 ---
 spring:
   profiles: production
@@ -28,3 +33,6 @@ spring:
       host: terrible-mongo
   webflux:
     base-path: /api
+
+search:
+  host: "terrible-search"

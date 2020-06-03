@@ -1,7 +1,6 @@
 /* Licensed under Apache-2.0 */
 package io.terrible.search.configuration;
 
-import java.util.function.BiConsumer;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.http.HttpHost;
 import org.elasticsearch.action.ActionListener;
@@ -11,23 +10,29 @@ import org.elasticsearch.action.bulk.BulkResponse;
 import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestClient;
 import org.elasticsearch.client.RestHighLevelClient;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+
+import java.util.function.BiConsumer;
 
 @Slf4j
 @Configuration
 public class SearchConfig {
 
-  public static final String HOSTNAME = "terrible-search";
+  @Value("${search.host}")
+  public String hostname;
 
-  public static final int PORT = 9200;
+  @Value("${search.port}")
+  public int port;
 
-  public static final String SCHEME = "http";
+  @Value("${search.scheme}")
+  public String scheme;
 
   @Bean
   public RestHighLevelClient client() {
 
-    return new RestHighLevelClient(RestClient.builder(new HttpHost(HOSTNAME, PORT, SCHEME)));
+    return new RestHighLevelClient(RestClient.builder(new HttpHost(hostname, port, scheme)));
   }
 
   @Bean

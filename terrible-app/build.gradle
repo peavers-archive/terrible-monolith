@@ -16,6 +16,10 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-webflux'
     implementation 'org.springframework.boot:spring-boot-starter-data-mongodb-reactive'
 
+    // Cache
+    implementation 'org.springframework.boot:spring-boot-starter-cache'
+    implementation 'com.hazelcast:hazelcast-spring'
+
     // Jackson addons
     implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'
 
