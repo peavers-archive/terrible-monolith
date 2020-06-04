@@ -1,6 +1,7 @@
 /* Licensed under Apache-2.0 */
 package io.terrible.app.services;
 
+import io.terrible.app.domain.AggregateResponse;
 import io.terrible.app.domain.GroupedMediaFile;
 import io.terrible.app.domain.MediaFile;
 import io.terrible.app.repository.MediaFileRepository;
@@ -71,6 +72,27 @@ public class MediaFileServiceImpl implements MediaFileService {
     log.info("Delete all");
 
     return repository.deleteAll();
+  }
+
+  @Override
+  public Mono<Long> count() {
+
+    log.info("Media file count");
+
+    return repository.count();
+  }
+
+  @Override
+  public Mono<Long> totalSize() {
+
+    log.info("Media file total size");
+
+    final Aggregation aggregation = newAggregation(group().sum("size").as("total"));
+
+    return Mono.from(
+        mongoTemplate
+            .aggregate(aggregation, "media-files", AggregateResponse.class)
+            .map(AggregateResponse::getTotal));
   }
 
   @Override

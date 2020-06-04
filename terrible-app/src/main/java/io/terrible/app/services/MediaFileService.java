@@ -17,4 +17,8 @@ public interface MediaFileService {
   Mono<MediaFile> save(MediaFile mediaFile);
 
   Mono<Void> deleteAll();
+
+  Mono<Long> count();
+
+  Mono<Long> totalSize();
 }
