@@ -3,6 +3,9 @@ package io.terrible.library.face.services;
 
 import io.terrible.library.face.utils.Classifier;
 import io.terrible.library.face.utils.FileUtils;
+import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.Arrays;
 import lombok.extern.slf4j.Slf4j;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
@@ -13,10 +16,6 @@ import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
 import org.opencv.objdetect.CascadeClassifier;
 import org.springframework.stereotype.Service;
-
-import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.Arrays;
 
 @Slf4j
 @Service

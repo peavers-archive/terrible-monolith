@@ -1,3 +1,4 @@
+/* Licensed under Apache-2.0 */
 package io.terrible.app.configuration;
 
 import com.hazelcast.config.Config;

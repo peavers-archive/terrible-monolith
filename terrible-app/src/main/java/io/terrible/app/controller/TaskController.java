@@ -1,7 +1,9 @@
+/* Licensed under Apache-2.0 */
 package io.terrible.app.controller;
 
 import io.terrible.app.domain.MediaFile;
 import io.terrible.app.services.MediaFileService;
+import java.util.ArrayList;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -10,8 +12,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Mono;
-
-import java.util.ArrayList;
 
 @Slf4j
 @CrossOrigin

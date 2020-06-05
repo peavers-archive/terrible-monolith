@@ -3,6 +3,9 @@ package io.terrible.app.services;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.terrible.app.domain.MediaFile;
+import java.io.IOException;
+import java.util.ArrayDeque;
+import java.util.concurrent.TimeUnit;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.elasticsearch.action.admin.indices.delete.DeleteIndexRequest;
@@ -17,10 +20,6 @@ import org.elasticsearch.search.builder.SearchSourceBuilder;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-
-import java.io.IOException;
-import java.util.ArrayDeque;
-import java.util.concurrent.TimeUnit;
 
 @Slf4j
 @Service
@@ -46,8 +45,9 @@ public class SearchServiceImpl implements SearchService {
       final SearchResponse searchResponse =
           restHighLevelClient.search(searchRequest, RequestOptions.DEFAULT);
 
-      final ArrayDeque<MediaFile> results =
-          new ArrayDeque<>(Math.toIntExact(searchResponse.getHits().getTotalHits().value));
+      final int hitSize = Math.toIntExact(searchResponse.getHits().getTotalHits().value);
+
+      final ArrayDeque<MediaFile> results = new ArrayDeque<>(hitSize);
 
       searchResponse.getHits().forEach(searchHit -> results.add(convertSourceMap(searchHit)));
 

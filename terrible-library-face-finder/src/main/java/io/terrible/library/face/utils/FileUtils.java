@@ -1,11 +1,11 @@
+/* Licensed under Apache-2.0 */
 package io.terrible.library.face.utils;
-
-import lombok.experimental.UtilityClass;
-import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.io.FilenameUtils;
 
 import java.io.File;
 import java.io.IOException;
+import lombok.experimental.UtilityClass;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.io.FilenameUtils;
 
 @Slf4j
 @UtilityClass

@@ -1,13 +1,12 @@
 /* Licensed under Apache-2.0 */
 package io.terrible.library.face.utils;
 
+import java.io.IOException;
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
 import org.opencv.objdetect.CascadeClassifier;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
-
-import java.io.IOException;
 
 @Slf4j
 @UtilityClass
