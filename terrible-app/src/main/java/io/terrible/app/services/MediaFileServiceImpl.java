@@ -46,7 +46,7 @@ public class MediaFileServiceImpl implements MediaFileService {
 
     log.info("Find all");
 
-    return repository.findAllByOrderByCreatedTimeDesc();
+    return repository.findAllNotIgnored();
   }
 
   @Override

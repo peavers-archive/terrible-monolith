@@ -43,6 +43,8 @@ public class MediaFile {
 
   private boolean isIndexed;
 
+  private boolean isIgnored;
+
   public MediaFile setId(final String id) {
 
     this.id = id;
