@@ -1,8 +1,8 @@
 /* Licensed under Apache-2.0 */
 package io.terrible.app.controller;
 
-import io.terrible.search.domain.MediaFileDto;
-import io.terrible.search.services.SearchService;
+import io.terrible.app.domain.MediaFile;
+import io.terrible.app.services.SearchService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -26,7 +26,7 @@ public class SearchController {
   private final SearchService searchService;
 
   @GetMapping
-  public Flux<MediaFileDto> search(@RequestParam final String query) {
+  public Flux<MediaFile> search(@RequestParam final String query) {
 
     return searchService.search(INDEX, query);
   }

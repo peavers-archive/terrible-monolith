@@ -20,6 +20,11 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-cache'
     implementation 'com.hazelcast:hazelcast-spring'
 
+    // Search
+    implementation group: 'org.elasticsearch', name: 'elasticsearch', version: '7.7.1'
+    implementation group: 'org.elasticsearch.client', name: 'elasticsearch-rest-client', version: '7.7.1'
+    implementation 'org.elasticsearch.client:elasticsearch-rest-high-level-client:7.7.1'
+
     // Jackson addons
     implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'
 
@@ -27,9 +32,6 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
     implementation 'io.micrometer:micrometer-core'
     implementation 'io.micrometer:micrometer-registry-prometheus'
-
-    // Terrible
-    implementation project(':terrible-library-search')
 }
 
 jib {

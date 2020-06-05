@@ -41,6 +41,8 @@ public class MediaFile {
 
   private LocalDateTime lastWatched;
 
+  private boolean isIndexed;
+
   public MediaFile setId(final String id) {
 
     this.id = id;
