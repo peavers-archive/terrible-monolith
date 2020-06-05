@@ -75,17 +75,22 @@ public class SearchServiceImpl implements SearchService {
           .health(new ClusterHealthRequest(index).waitForYellowStatus(), RequestOptions.DEFAULT);
 
       return Mono.empty();
-    } catch (Exception e) {
+    } catch (final Exception e) {
       return Mono.error(e);
     }
   }
 
   @Override
-  public Flux<Void> populate(final String index, Flux<MediaFileDto> mediaFileDtoFlux) {
+  public Mono<Void> populate(final String index, final Flux<MediaFileDto> mediaFileDtoFlux) {
 
-    return mediaFileDtoFlux
-        .flatMap(value -> index(index, value.getId(), toJson(value)))
-        .doOnComplete(this::flush);
+    log.info("Populating index {}", index);
+
+    return createIndex(index)
+        .then(
+            Mono.from(
+                mediaFileDtoFlux
+                    .flatMap(value -> index(index, value.getId(), toJson(value)))
+                    .doOnComplete(this::flush)));
   }
 
   @Override
@@ -138,7 +143,7 @@ public class SearchServiceImpl implements SearchService {
 
       return Flux.fromIterable(results);
 
-    } catch (IOException e) {
+    } catch (final IOException e) {
       return Flux.error(e);
     }
   }

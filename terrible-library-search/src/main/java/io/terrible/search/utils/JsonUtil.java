@@ -12,12 +12,17 @@ import org.springframework.stereotype.Component;
 @Component
 public class JsonUtil {
 
+  private static ObjectMapper objectMapper() {
+    final ObjectMapper objectMapper = new ObjectMapper();
+    objectMapper.findAndRegisterModules();
+
+    return objectMapper;
+  }
+
   public static String toJson(final MediaFileDto mediaFileDto) {
 
-    ObjectMapper objectMapper = new ObjectMapper();
-
     try {
-      return objectMapper.writeValueAsString(mediaFileDto);
+      return objectMapper().writeValueAsString(mediaFileDto);
     } catch (final JsonProcessingException e) {
       log.error("Unable to parse to json {}", e.getMessage(), e);
 
@@ -27,10 +32,8 @@ public class JsonUtil {
 
   public static MediaFileDto convertSourceMap(final SearchHit searchHit) {
 
-    ObjectMapper objectMapper = new ObjectMapper();
-
     final MediaFileDto mediaFileDto =
-        objectMapper.convertValue(searchHit.getSourceAsMap(), MediaFileDto.class);
+        objectMapper().convertValue(searchHit.getSourceAsMap(), MediaFileDto.class);
 
     mediaFileDto.setId(searchHit.getId());
 

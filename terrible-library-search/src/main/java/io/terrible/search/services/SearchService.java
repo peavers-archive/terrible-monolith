@@ -13,7 +13,7 @@ public interface SearchService {
 
   Mono<Void> flush();
 
-  Flux<Void> populate(String index, Flux<MediaFileDto> mediaFileDtoFlux);
+  Mono<Void> populate(String index, Flux<MediaFileDto> mediaFileDtoFlux);
 
   Flux<MediaFileDto> search(String index, String query);
 
