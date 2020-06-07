@@ -7,14 +7,7 @@ import io.terrible.app.services.MediaFileService;
 import io.terrible.app.services.MediaListService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
@@ -32,9 +25,10 @@ public class MediaFileController {
   private final HistoryService historyService;
 
   @GetMapping
-  public Flux<MediaFile> findAll() {
+  public Flux<MediaFile> findAll(
+      @RequestParam(required = false, defaultValue = "createdTime") final String order) {
 
-    return mediaFileService.findAll();
+    return mediaFileService.findAll(order);
   }
 
   @GetMapping("/{id}")

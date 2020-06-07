@@ -8,6 +8,7 @@ import java.util.ArrayDeque;
 import java.util.concurrent.TimeUnit;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.elasticsearch.action.admin.indices.delete.DeleteIndexRequest;
 import org.elasticsearch.action.search.SearchRequest;
 import org.elasticsearch.action.search.SearchResponse;
@@ -30,6 +31,10 @@ public class SearchServiceImpl implements SearchService {
 
   @Override
   public Flux<MediaFile> search(final String index, final String query) {
+
+    if (StringUtils.isEmpty(query)) {
+      return Flux.empty();
+    }
 
     try {
       final SearchSourceBuilder sourceBuilder = new SearchSourceBuilder();
