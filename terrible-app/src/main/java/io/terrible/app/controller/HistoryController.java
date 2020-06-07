@@ -6,12 +6,7 @@ import io.terrible.app.domain.MediaFile;
 import io.terrible.app.services.HistoryService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
 
 @Slf4j
@@ -33,5 +28,11 @@ public class HistoryController {
   public Mono<History> getHistory() {
 
     return historyService.getHistory();
+  }
+
+  @DeleteMapping
+  public Mono<Void> deleteHistory() {
+
+    return historyService.deleteAll();
   }
 }

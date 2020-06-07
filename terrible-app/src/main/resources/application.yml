@@ -36,3 +36,5 @@ spring:
 
 search:
   host: "terrible-search"
+  port: 9200
+  scheme: "http"
