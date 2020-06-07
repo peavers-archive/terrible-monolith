@@ -7,9 +7,12 @@ import io.terrible.app.services.MediaFileService;
 import io.terrible.app.services.MediaListService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.io.FileUtils;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+
+import java.io.File;
 
 @Slf4j
 @CrossOrigin
@@ -41,6 +44,16 @@ public class MediaFileController {
   public Mono<MediaFile> save(@RequestBody final MediaFile mediaFile) {
 
     return mediaFileService.save(mediaFile);
+  }
+
+  @DeleteMapping("/{id}")
+  public Mono<Void> deleteById(@PathVariable final String id) {
+
+    return mediaFileService
+        .findById(id)
+        .doOnSuccess(mediaFile -> FileUtils.deleteQuietly(new File(mediaFile.getPath())))
+        .doOnSuccess(mediaFile -> FileUtils.deleteQuietly(new File(mediaFile.getThumbnailPath())))
+        .then(mediaFileService.deleteById(id));
   }
 
   @DeleteMapping

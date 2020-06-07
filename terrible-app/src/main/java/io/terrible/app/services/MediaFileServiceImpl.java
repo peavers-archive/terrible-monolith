@@ -1,16 +1,10 @@
 /* Licensed under Apache-2.0 */
 package io.terrible.app.services;
 
-import static java.time.temporal.TemporalAdjusters.firstDayOfYear;
-import static java.time.temporal.TemporalAdjusters.lastDayOfYear;
-import static org.springframework.data.mongodb.core.aggregation.Aggregation.*;
-import static org.springframework.data.mongodb.core.query.Criteria.where;
-
 import io.terrible.app.domain.AggregateResponse;
 import io.terrible.app.domain.GroupedMediaFile;
 import io.terrible.app.domain.MediaFile;
 import io.terrible.app.repository.MediaFileRepository;
-import java.time.LocalDate;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.bson.Document;
@@ -25,6 +19,13 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+
+import java.time.LocalDate;
+
+import static java.time.temporal.TemporalAdjusters.firstDayOfYear;
+import static java.time.temporal.TemporalAdjusters.lastDayOfYear;
+import static org.springframework.data.mongodb.core.aggregation.Aggregation.*;
+import static org.springframework.data.mongodb.core.query.Criteria.where;
 
 @Slf4j
 @Service
@@ -59,6 +60,14 @@ public class MediaFileServiceImpl implements MediaFileService {
     log.info("Save {}", mediaFile);
 
     return repository.save(mediaFile);
+  }
+
+  @Override
+  public Mono<Void> deleteById(final String id) {
+
+    log.info("Delete by Id");
+
+    return repository.deleteById(id);
   }
 
   @Override
