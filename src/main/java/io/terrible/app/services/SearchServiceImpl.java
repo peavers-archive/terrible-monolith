@@ -3,6 +3,9 @@ package io.terrible.app.services;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.terrible.app.domain.MediaFile;
+import java.io.IOException;
+import java.util.ArrayDeque;
+import java.util.concurrent.TimeUnit;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -18,10 +21,6 @@ import org.elasticsearch.search.builder.SearchSourceBuilder;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-
-import java.io.IOException;
-import java.util.ArrayDeque;
-import java.util.concurrent.TimeUnit;
 
 @Slf4j
 @Service
