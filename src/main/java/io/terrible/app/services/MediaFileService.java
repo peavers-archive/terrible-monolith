@@ -12,6 +12,8 @@ public interface MediaFileService {
 
   Flux<GroupedMediaFile> findAllGroupedByDate(String dateField);
 
+  Flux<MediaFile> findAllIgnoredFiles();
+
   Mono<MediaFile> findById(String id);
 
   Mono<MediaFile> save(MediaFile mediaFile);
