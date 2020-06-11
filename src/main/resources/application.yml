@@ -21,9 +21,9 @@ management:
       enabled: true
 
 search:
+  scheme: "http"
   host: "localhost"
   port: 9200
-  scheme: "http"
 
 ---
 spring:
@@ -35,6 +35,6 @@ spring:
     base-path: /api
 
 search:
+  scheme: "http"
   host: "terrible-search"
   port: 9200
-  scheme: "http"
