@@ -2,6 +2,7 @@
 package io.terrible.app.controller;
 
 import io.terrible.app.domain.MediaFile;
+import io.terrible.app.services.MediaFileService;
 import io.terrible.app.services.SearchService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,6 +26,8 @@ public class SearchController {
 
   private final SearchService searchService;
 
+  private final MediaFileService mediaFileService;
+
   @GetMapping
   public Flux<MediaFile> search(@RequestParam final String query) {
 
@@ -34,6 +37,10 @@ public class SearchController {
   @DeleteMapping
   public Mono<Void> deleteAll() {
 
-    return searchService.deleteIndex(INDEX);
+    return mediaFileService
+        .findAll("createdTime")
+        .doOnNext(mediaFile -> mediaFile.setIndexed(false))
+        .flatMap(mediaFileService::save)
+        .then(searchService.deleteIndex(INDEX));
   }
 }
