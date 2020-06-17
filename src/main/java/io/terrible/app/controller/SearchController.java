@@ -38,9 +38,12 @@ public class SearchController {
   public Mono<Void> deleteAll() {
 
     return mediaFileService
-        .findAll("createdTime")
-        .doOnNext(mediaFile -> mediaFile.setIndexed(false))
-        .flatMap(mediaFileService::save)
+        .findAll()
+        .flatMap(
+            mediaFile -> {
+              mediaFile.setIndexed(false);
+              return mediaFileService.save(mediaFile);
+            })
         .then(searchService.deleteIndex(INDEX));
   }
 }

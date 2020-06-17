@@ -8,6 +8,8 @@ import reactor.core.publisher.Mono;
 
 public interface MediaFileService {
 
+  Flux<MediaFile> findAll();
+
   Flux<MediaFile> findAll(String order);
 
   Flux<GroupedMediaFile> findAllGroupedByDate(String dateField);

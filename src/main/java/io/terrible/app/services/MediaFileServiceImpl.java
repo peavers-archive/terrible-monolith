@@ -42,6 +42,14 @@ public class MediaFileServiceImpl implements MediaFileService {
   private final ReactiveMongoTemplate mongoTemplate;
 
   @Override
+  public Flux<MediaFile> findAll() {
+
+    log.info("Find all");
+
+    return repository.findAll();
+  }
+
+  @Override
   @Cacheable()
   public Flux<MediaFile> findAll(final String order) {
 
