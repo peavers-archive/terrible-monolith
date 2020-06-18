@@ -10,4 +10,6 @@ public interface SearchService {
   Flux<MediaFile> search(String index, String query);
 
   Mono<Void> deleteIndex(String index);
+
+  Mono<Void> deleteById(String index, String id);
 }
