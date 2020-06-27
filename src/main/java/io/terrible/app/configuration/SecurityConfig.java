@@ -3,10 +3,12 @@ package io.terrible.app.configuration;
 
 import java.util.Collections;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.reactive.CorsConfigurationSource;
 import org.springframework.web.cors.reactive.UrlBasedCorsConfigurationSource;
 
+@Configuration
 public class SecurityConfig {
 
   private static final String SECURE_ROUTE = "/*/**";
