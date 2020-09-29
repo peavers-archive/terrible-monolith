@@ -47,6 +47,8 @@ public class MediaFile {
 
   private boolean isIgnored;
 
+  private boolean isDelete;
+
   public MediaFile setId(final String id) {
 
     this.id = id;
