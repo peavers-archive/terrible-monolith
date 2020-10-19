@@ -30,7 +30,7 @@ dependencies {
     implementation 'commons-io:commons-io:2.8.0'
 
     // Google
-    implementation 'com.google.guava:guava:29.0-jre'
+    implementation 'com.google.guava:guava:30.0-jre'
 
     // Search
     implementation group: 'org.elasticsearch', name: 'elasticsearch', version: '7.9.2'
