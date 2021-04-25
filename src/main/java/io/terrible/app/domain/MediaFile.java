@@ -2,6 +2,8 @@
 package io.terrible.app.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+import java.io.File;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import lombok.AllArgsConstructor;
@@ -54,5 +56,9 @@ public class MediaFile {
     this.id = id;
 
     return this;
+  }
+
+  public String getParent() {
+    return new File(this.path).getParent();
   }
 }

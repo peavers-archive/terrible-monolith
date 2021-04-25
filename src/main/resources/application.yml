@@ -3,9 +3,7 @@ spring:
     name: terrible-api-service
   data:
     mongodb:
-      host: 192.168.0.10
-
-
+      host: 192.168.0.129
 
 server:
   port: 8080
@@ -28,7 +26,7 @@ management:
 
 search:
   scheme: "http"
-  host: "192.168.0.10"
+  host: "192.168.0.129"
   port: 9200
 
 ---

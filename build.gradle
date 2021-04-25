@@ -79,6 +79,3 @@ spotless {
         googleJavaFormat()
     }
 }
-
-build.dependsOn spotlessJavaApply
-
